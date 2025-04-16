@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Algerian Artists</title>
+</head>
+<body>
+    <h1>Search Algerian Artists</h1>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Enter artist name">
+        <button type="submit">Search</button>
+    </form>
+    <hr>
+    {% for artist in results %}
+        <h2>{{ artist.attrib.nom }}</h2>
+        <p><strong>City:</strong> {{ artist.attrib.ville }}</p>
+        <p><strong>Website:</strong> <a href="{{ artist.find('site').attrib.url }}">{{ artist.find('site').attrib.url }}</a></p>
+        <p><strong>Biography:</strong> {{ artist.find('biographie').text }}</p>
+        <h4>Albums:</h4>
+        <ul>
+        {% for album in get_albums(artist.attrib.no) %}
+            <li>{{ album.find('titre').text }} ({{ album.attrib.annee }})</li>
+            <ul>
+            {% for song in album.find('chansons').findall('chanson') %}
+                <li>{{ song.text }}</li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+        <hr>
+    {% endfor %}
+</body>
+</html>
